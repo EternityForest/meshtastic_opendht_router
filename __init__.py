@@ -152,6 +152,8 @@ class ChannelMappingListener:
 
         self.last_interest = time.time()
 
+        self.started = time.time()
+
         def listener_thread():
             while self.last_interest > time.time() - 15 * 60:
                 self.conn = requests.get(url, stream=True, timeout=3600)#type: ignore
@@ -161,9 +163,15 @@ class ChannelMappingListener:
                         if i:
                             print("Packet from DHT:", i)
                             try:
-
+                                
                                 data = decode_from_dht(i.decode())
                                 data = fernet.decrypt(data)
+
+                                timestamp = fernet.extract_timestamp(data)
+                                if timestamp < self.started:
+                                    continue
+                                if timestamp > (self.started + 3600):
+                                    continue
 
                                 self.on_packet(
                                     data.decode()
