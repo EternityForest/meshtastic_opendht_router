@@ -1,0 +1,11 @@
+[project]
+name = "meshbackend2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "cryptography>=44.0.2",
+    "meshtastic>=2.6.1",
+    "niquests>=3.14.0",
+]
